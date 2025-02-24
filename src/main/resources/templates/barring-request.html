@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<title>Barring Request</title>
+<link href="assets/img/favicon.ico" rel="shortcut icon"
+	type="image/x-icon" />
+<!-- Load Material Icons from Google Fonts-->
+<link
+	href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+	rel="stylesheet" />
+<!-- Load Simple DataTables Stylesheet-->
+<link
+	href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css"
+	rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/style.css"
+	rel="stylesheet" />
+<!-- Roboto and Roboto Mono fonts from Google Fonts-->
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+	rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500"
+	rel="stylesheet" />
+<!-- Load main stylesheet-->
+<link href="css/styles.css" rel="stylesheet" />
+<style>
+table {
+	width: 100%;
+}
+
+table, th, td {
+	border: 1px solid black;
+}
+/* Hide the file input using
+opacity */
+.bulk-file {
+	position: absolute;
+	filter: alpha(opacity = 0);
+	opacity: 0;
+}
+
+.bulk-file+label {
+	border: 1px solid #CCC;
+	border-radius: 3px;
+	text-align: left;
+	padding: 5px;
+	margin: 0;
+	left: 0;
+	cursor: pointer;
+}
+
+.bulk-file+label {
+	text-align: center;
+	left: 7.35em;
+	top: 0.5em;
+	/* Decorative */
+	background: #2199e8;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+}
+
+#loader {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	display: none;
+}
+</style>
+</head>
+<body class="nav-fixed bg-light">
+	<!-- Top app bar navigation menu-->
+	<div th:insert="~{fragments/header.html :: headermenu}"></div>
+	<!-- Layout wrapper-->
+	<div id="layoutDrawer">
+		<!-- Layout navigation-->
+		<div th:insert="~{fragments/leftMenu.html :: leftmenu}"></div>
+		<!-- Layout content-->
+		<div id="layoutDrawer_content">
+			<!-- Main page content-->
+			<main> <!-- Page header--> <header class="bg-dark">
+				<div class="container-xl px-5">
+					<h1 class="text-white py-3 mb-0 display-6">Barring Request</h1>
+				</div>
+			</header>
+			<div class="container-xl p-5">
+				<div class="card card-raised">
+					<div class="card-body text-center p-5">
+						<div class="tab-content mb-5">
+							<div class="tab-pane show active" role="tabpanel"
+								id="bootstrapFormBasicDemo"
+								aria-labelledby="bootstrapFormBasicDemoTab">
+								<div class="p-3 p-sm-1">
+									<div class="row">
+										<div class="col-sm-6">
+											<div class="mb-3">
+												<label class="form-label" for="billingUID1">Billing
+													UID </label> <input class="form-control" id="billingUID1"
+													type="text" placeholder="Enter billingUID1"
+													name="billingUID1" />
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="mb-3">
+												<label class="form-label" for="accountID">AccountID</label>
+												<input class="form-control" id="accountID" type="text"
+													placeholder="Enter accountID" name="accountID" />
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="mb-3">
+												<label class="form-label" for="msisdn">Msisdn</label> <input
+													class="form-control" id="msisdn" type="text"
+													placeholder="Enter msisdn" name="msisdn" />
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="mb-3">
+												<label class="form-label" for="litepickerBillDate">Bill
+													Date</label> <input class="form-control" id="litepickerBillDate"
+													placeholder="Select bill date..." />
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="mb-3">
+												<label class="form-label" for="litepickerBillDueDate">Due
+													Date</label> <input class="form-control" id="litepickerBillDueDate"
+													placeholder="Select due date..." />
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="mb-3">
+												<label class="form-label" for="amount">Amount</label> <input
+													class="form-control" id="amount" type="text"
+													placeholder="Enter amount" name="amount" />
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="mb-3">
+												<label class="form-label" for="comment">Comment</label> <input
+													class="form-control" id="comment" type="text"
+													placeholder="Enter comment" name="comment" />
+											</div>
+										</div>
+										<div class="col-sm-6"></div>
+										<div class="col-sm-6">
+											<div class="mb-3">
+												<button class="btn btn-danger" name="Submit" value="Submit"
+													type="Submit" th:text="Submit" id="barringReqbtnSubmit">Submit</button>
+												&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-primary"
+													href="#">Close</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			</main>
+			<!-- Footer-->
+			<div th:insert="~{fragments/footer.html :: footer}"></div>
+			<div id="loader" style="display: none;">
+				<!-- Spinner -->
+				<div class="spinner-border text-primary" role="status">
+					<span class="visually-hidden">Loading...</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+		crossorigin="anonymous"></script>
+	<script src="js/scripts.js"></script>
+	<script src="js/jquery/jquery.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+	<script src="js/localization/localization.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/litepicker/dist/js/main.nocss.js"
+		crossorigin="anonymous"></script>
+	<script th:src="@{js/litepicker.js}"></script>
+	<script src="js/portme/suspension.js"></script>
+</body>
+</html>

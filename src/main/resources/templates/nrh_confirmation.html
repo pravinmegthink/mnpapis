@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<title>Terminate</title>
+<!-- Load Favicon-->
+<link href="assets/img/favicon.ico" rel="shortcut icon"
+	type="image/x-icon" />
+<!-- Load Material Icons from Google Fonts-->
+<link
+	href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+	rel="stylesheet" />
+<!-- Load Simple DataTables Stylesheet-->
+<link
+	href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css"
+	rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/style.css"
+	rel="stylesheet" />
+<!-- Roboto and Roboto Mono fonts from Google Fonts-->
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+	rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500"
+	rel="stylesheet" />
+<!-- Load main stylesheet-->
+<link href="css/styles.css" rel="stylesheet" />
+<style>
+td {
+	white-space: nowrap;
+}
+
+th {
+	white-space: nowrap;
+}
+/* Tooltip container */
+.tooltip {
+	position: relative;
+	display: inline-block;
+	border-bottom: 1px dotted black;
+	/* If you want dots under the hoverable text */
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+	visibility: hidden;
+	width: 120px;
+	background-color: #555;
+	color: #fff;
+	text-align: center;
+	padding: 5px 0;
+	border-radius: 6px;
+	/* Position the tooltip text */
+	position: absolute;
+	z-index: 1;
+	bottom: 125%;
+	left: 50%;
+	margin-left: -60px;
+	/* Fade in tooltip */
+	opacity: 0;
+	transition: opacity 0.3s;
+}
+
+/* Tooltip arrow */
+.tooltip .tooltiptext::after {
+	content: "";
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	margin-left: -5px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: #555 transparent transparent transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+	visibility: visible;
+	opacity: 1;
+}
+</style>
+</head>
+<body class="nav-fixed bg-light">
+	<!-- Top app bar navigation menu-->
+	<div th:insert="~{fragments/header.html :: headermenu}"></div>
+	<!-- Layout wrapper-->
+	<div id="layoutDrawer">
+		<!-- Layout navigation-->
+		<div th:insert="~{fragments/leftMenu.html :: leftmenu}"></div>
+		<!-- Layout content-->
+		<div id="layoutDrawer_content">
+			<!-- Main page content-->
+			<!-- Page header-->
+			<header class="bg-dark">
+				<div class="container-xl px-5">
+					<h1 class="text-white py-3 mb-0 display-6">
+						<span>Termination</span>
+					</h1>
+				</div>
+			</header>
+			<div class="container-xl p-5">
+				<div class="card card-raised">
+					<div class="card-body text-center p-5">
+						<table id="" class="table" style="overflow-y: scroll; width: 100%">
+							<thead>
+								<tr>
+									<th>RequestId</th>
+									<th>MSISDN</th>
+									<th>Area</th>
+									<th>DNO</th>
+									<th>Original Carrier</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="item : ${terminate}">
+									<td th:text="${item.requestId}"></td>
+									<td th:text="${item.msisdn}"></td>
+									<td th:text="${item.area}"></td>
+									<td th:text="${item.dno}"></td>
+									<td th:text="${item.originalCarrier}"></td>
+									<td>
+										<button class="nrhConfirm btn btn-light btn-sm"
+											th:data-id="${item.requestId}" th:data-title="${item.msisdn}">Submit</button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<!-- Footer-->
+			<div th:insert="~{fragments/footer.html :: footer}"></div>
+		</div>
+	</div>
+	<!-- Load Bootstrap JS bundle-->
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+		crossorigin="anonymous"></script>
+	<!-- Load global scripts-->
+	<!-- 	<script type="module" src="js/material.js"></script> -->
+	<script src="js/scripts.js"></script>
+	<!-- Load Simple DataTables Scripts-->
+	<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"
+		crossorigin="anonymous"></script>
+	<script src="js/datatables/datatables-simple-demo.js"></script>
+	<script src="js/jquery/jquery.min.js"></script>
+	<script src="js/localization/localization.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/litepicker/dist/js/main.nocss.js"
+		crossorigin="anonymous"></script>
+	<script src="js/portme/terminate.js"></script>
+	<script src="js/litepicker.js"></script>
+	<!-- 	<script src="/js/prism.js"></script> -->
+</body>
+</html>

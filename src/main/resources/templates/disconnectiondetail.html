@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<title>Port Disconnection Detail</title>
+<!-- Load Favicon-->
+<link href="assets/img/favicon.ico" rel="shortcut icon"
+	type="image/x-icon" />
+<!-- Load Material Icons from Google Fonts-->
+<link
+	href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+	rel="stylesheet" />
+<!-- Load Simple DataTables Stylesheet-->
+<link
+	href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css"
+	rel="stylesheet" />
+<!-- Roboto and Roboto Mono fonts from Google Fonts-->
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+	rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500"
+	rel="stylesheet" />
+<!-- Load main stylesheet-->
+<link href="css/styles.css" rel="stylesheet" />
+<style>
+td {
+	white-space: nowrap;
+}
+
+th {
+	white-space: nowrap;
+}
+</style>
+</head>
+<body class="nav-fixed bg-light">
+	<!-- Top app bar navigation menu-->
+	<div th:insert="~{fragments/header.html :: headermenu}"></div>
+	<!-- Layout wrapper-->
+	<div id="layoutDrawer">
+		<!-- Layout navigation-->
+		<div th:insert="~{fragments/leftMenu.html :: leftmenu}"></div>
+		<!-- Layout content-->
+		<div id="layoutDrawer_content">
+			<!-- Main page content-->
+			<!-- Page header-->
+			<header class="bg-dark">
+				<div class="container-xl px-5">
+					<h1 class="text-white py-3 mb-0 display-6">PORT DISCONNECTION
+						DETAIL</h1>
+				</div>
+			</header>
+			<div class="container-xl p-5">
+				<div class="card card-raised">
+					<div class="card-body text-center p-5">
+						<table id="datatablesSimple" class="table"
+							style="overflow-y: scroll; display: block;">
+							<thead>
+								<tr>
+									<th>Sr.No</th>
+									<th>Request Id</th>
+									<th>Area</th>
+									<th>DNO</th>
+									<th>MSISDN</th>
+									<th>Status</th>
+									<th>IMSI</th>
+									<th>HLR</th>
+									<th>SIM</th>
+									<th>Created Date</th>
+									<th>Updated Date</th>
+									<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="item, stats : ${listofportme}">
+									<td th:text="${stats.count}">1</td>
+									<td th:text="${item.requestId}"></td>
+									<td th:text="${item.area}"></td>
+									<td th:text="${item.dno}"></td>
+									<td th:text="${item.msisdn}"></td>
+									<td th:text="${item.statusDesc}"></td>
+									<td th:text="${item.imsi}"></td>
+									<td th:text="${item.hlr}"></td>
+									<td th:text="${item.sim}"></td>
+									<td th:text="${item.createdDate}"></td>
+									<td th:text="${item.updatedDate}"></td>
+									<td>
+										<button class="portDisconnect btn btn-light btn-sm"
+											th:data-id="${item.requestId}" th:data-title="${item.msisdn}">Disconnection</button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<!-- Footer-->
+			<div th:insert="~{fragments/footer.html :: footer}"></div>
+		</div>
+	</div>
+	<!-- Load Bootstrap JS bundle-->
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+		crossorigin="anonymous"></script>
+	<!-- Load global scripts-->
+	<script type="module" src="js/material.js"></script>
+	<script src="js/scripts.js"></script>
+	<!-- Load Simple DataTables Scripts-->
+	<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"
+		crossorigin="anonymous"></script>
+	<script src="js/datatables/datatables-simple-demo.js"></script>
+	<script src="js/jquery/jquery.min.js"></script>
+	<script src="js/portme/disconnection.js"></script>
+	<script src="js/localization/localization.js"></script>
+</body>
+</html>

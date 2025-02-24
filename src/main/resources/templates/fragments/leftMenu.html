@@ -1,0 +1,222 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8" />
+<body>
+	<div th:fragment=leftmenu>
+		<div id="layoutDrawer_nav">
+			<nav class="drawer accordion drawer-light bg-white"
+				id="drawerAccordion">
+				<div class="drawer-menu">
+					<div class="nav">
+						<div class="drawer-menu-divider d-sm-none"></div>
+						<div class="drawer-menu-heading">TBMS</div>
+						<ul th:each="lmenu, stats : ${leftMenuList}"
+							class="sidebar-menu fixed" data-widget="tree"
+							style="list-style-type: none;">
+							<li th:switch="${lmenu.privilegeId}" class="treeview">
+								<div th:case="1">
+									<a class="nav-link" href="dashboard.html">
+										<div class="nav-link-icon">
+											<i class="material-icons">dashboard</i>
+										</div> Dashboard
+									</a>
+								</div>
+								<div th:case="2">
+									<a class="nav-link collapsed" href="javascript:void(0);"
+										data-bs-toggle="collapse" data-bs-target="#collapsePortIN"
+										aria-expanded="false" aria-controls="collapseLayouts">
+										<div class="nav-link-icon">
+											<i class="material-icons">view_compact</i>
+										</div> Port IN
+										<div class="drawer-collapse-arrow">
+											<i class="material-icons">expand_more</i>
+										</div>
+									</a>
+									<!-- Nested drawer nav (Layouts)-->
+									<div class="collapse" id="collapsePortIN"
+										aria-labelledby="headingOne" data-bs-parent="#drawerAccordion">
+										<nav class="drawer-menu-nested nav">
+											<a class="nav-link" href="portin.html">View</a><a
+												class="nav-link" href="portinrequest.html">Apply</a> <a
+												class="nav-link" href="portactivation.html">Activation</a> <a
+												class="nav-link" href="getcancellation.html">Cancellation</a>
+										</nav>
+									</div>
+								</div> <!-- Drawer link (Pages)-->
+
+								<div th:case="3">
+									<a class="nav-link collapsed" href="javascript:void(0);"
+										data-bs-toggle="collapse" data-bs-target="#collapsePortOUT"
+										aria-expanded="false" aria-controls="collapsePages">
+										<div class="nav-link-icon">
+											<i class="material-icons">layers</i>
+										</div> Port OUT
+										<div class="drawer-collapse-arrow">
+											<i class="material-icons">expand_more</i>
+										</div>
+									</a>
+									<div class="collapse" id="collapsePortOUT"
+										aria-labelledby="headingOne" data-bs-parent="#drawerAccordion">
+										<nav class="drawer-menu-nested nav">
+											<a class="nav-link" href="portout.html">View</a><a
+												class="nav-link" href="portapproval.html">Approval</a> <a
+												class="nav-link" href="disconnection.html">Disconnection</a>
+										</nav>
+									</div>
+								</div>
+								<div th:case="4">
+									<a class="nav-link" href="reversal.html">
+										<div class="nav-link-icon">
+											<i class="material-icons">description</i>
+										</div> Reversal
+									</a>
+								</div>
+								<div th:case="5">
+									<a class="nav-link" href="terminate.html">
+										<div class="nav-link-icon">
+											<i class="material-icons">description</i>
+										</div> Termination Recipient
+									</a>
+								</div>
+								<div th:case="6">
+									<a class="nav-link" href="nrhconfirmation.html">
+										<div class="nav-link-icon">
+											<i class="material-icons">description</i>
+										</div> NUMBER RETUNR RANGE HOLDER
+									</a>
+								</div>
+
+								<div th:case="7">
+									<a class="nav-link" href="broadcast.html">
+										<div class="nav-link-icon">
+											<i class="material-icons">amp_stories</i>
+										</div> Port DB
+									</a>
+								</div>
+								<div th:case="8">
+									<a class="nav-link" href="broadcaststatus.html">
+										<div class="nav-link-icon">
+											<i class="material-icons">widgets</i>
+										</div> Broadcast Status
+									</a>
+								</div>
+								<div th:case="9">
+									<a class="nav-link" href="recovery.html">
+										<div class="nav-link-icon">
+											<i class="material-icons">filter_alt</i>
+										</div> Recovery DB Request
+									</a>
+								</div>
+								<div th:case="10">
+									<a class="nav-link" href="recoverystatus.html">
+										<div class="nav-link-icon">
+											<i class="material-icons">filter_alt</i>
+										</div> Recovery DB Status
+									</a>
+								</div>
+								<div th:case="11">
+									<a class="nav-link collapsed" href="javascript:void(0);"
+										data-bs-toggle="collapse"
+										data-bs-target="#collapseNumberPrefix" aria-expanded="false"
+										aria-controls="collapsePages">
+										<div class="nav-link-icon">
+											<i class="material-icons">layers</i>
+										</div> Number Prefix
+										<div class="drawer-collapse-arrow">
+											<i class="material-icons">expand_more</i>
+										</div>
+									</a>
+									<div class="collapse" id="collapseNumberPrefix"
+										aria-labelledby="headingOne" data-bs-parent="#drawerAccordion">
+										<nav class="drawer-menu-nested nav">
+											<a class="nav-link" href="prefix.html">View</a> <a
+												class="nav-link" href="createprefix.html">Create</a>
+										</nav>
+									</div>
+								</div>
+								<div th:case="12">
+									<a class="nav-link collapsed" href="javascript:void(0);"
+										data-bs-toggle="collapse"
+										data-bs-target="#collapseUserManagement" aria-expanded="false"
+										aria-controls="collapsePages">
+										<div class="nav-link-icon">
+											<i class="material-icons">account_circle</i>
+										</div> User Management
+										<div class="drawer-collapse-arrow">
+											<i class="material-icons">expand_more</i>
+										</div>
+									</a>
+									<div class="collapse" id="collapseUserManagement"
+										aria-labelledby="headingOne" data-bs-parent="#drawerAccordion">
+										<nav class="drawer-menu-nested nav">
+											<a class="nav-link" href="users.html">View</a> <a
+												class="nav-link" href="createuser.html">Create</a>
+										</nav>
+									</div>
+								</div> <!-- Divider--> <!-- 						<div class="drawer-menu-divider"></div> -->
+								<div th:case="13">
+									<a class="nav-link collapsed" href="javascript:void(0);"
+										data-bs-toggle="collapse"
+										data-bs-target="#collapseSuspensionDonor"
+										aria-expanded="false" aria-controls="collapseLayouts">
+										<div class="nav-link-icon">
+											<i class="material-icons">view_compact</i>
+										</div>Suspension Donor
+										<div class="drawer-collapse-arrow">
+											<i class="material-icons">expand_more</i>
+										</div>
+									</a>
+									<!-- Nested drawer nav (Layouts)-->
+									<div class="collapse" id="collapseSuspensionDonor"
+										aria-labelledby="headingOne" data-bs-parent="#drawerAccordion">
+										<nav class="drawer-menu-nested nav">
+											<a class="nav-link" href="suspension-request.html">Bill
+												Payment Request</a><a class="nav-link"
+												href="suspension-cancel.html">Bill Payment Cancellation</a>
+											<a class="nav-link" href="suspension-acknowledgment.html">Bill
+												Payment Acknowledgement</a>
+										</nav>
+									</div>
+								</div> <!-- Drawer link (Pages)-->
+								<div th:case="14">
+									<a class="nav-link collapsed" href="javascript:void(0);"
+										data-bs-toggle="collapse"
+										data-bs-target="#collapseSuspensionRecipient"
+										aria-expanded="false" aria-controls="collapseLayouts">
+										<div class="nav-link-icon">
+											<i class="material-icons">view_compact</i>
+										</div>Suspension Recipient
+										<div class="drawer-collapse-arrow">
+											<i class="material-icons">expand_more</i>
+										</div>
+									</a>
+									<!-- Nested drawer nav (Layouts)-->
+									<div class="collapse" id="collapseSuspensionRecipient"
+										aria-labelledby="headingOne" data-bs-parent="#drawerAccordion">
+										<nav class="drawer-menu-nested nav">
+											<a class="nav-link" href="barring-request.html">Baring
+												Request</a><a class="nav-link" href="barring-cancel.html">Baring
+												Cancellation</a> <a class="nav-link"
+												href="barring-receipt-confirmation.html">Payment Receipt
+												Confirmation</a>
+										</nav>
+									</div>
+								</div> <!-- Drawer link (Pages)-->
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- Drawer footer        -->
+				<!--                     <div class="drawer-footer border-top"> -->
+				<!--                         <div class="d-flex align-items-center"> -->
+				<!--                             <i class="material-icons text-muted">account_circle</i> -->
+				<!--                             <div class="ms-3"> -->
+				<!--                                 <div class="caption">Logged in as:</div> -->
+				<!--                                 <div class="small fw-500">Start Bootstrap</div> -->
+				<!--                             </div> -->
+				<!--                         </div> -->
+				<!--                     </div> -->
+			</nav>
+		</div>
+	</div>
+</body>
+</html>

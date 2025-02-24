@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<title>PORT IN</title>
+<!-- Load Favicon-->
+<link href="assets/img/favicon.ico" rel="shortcut icon"
+	type="image/x-icon" />
+<!-- Load Material Icons from Google Fonts-->
+<link
+	href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+	rel="stylesheet" />
+<!-- Load Simple DataTables Stylesheet-->
+<link
+	href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css"
+	rel="stylesheet" />
+<!-- Roboto and Roboto Mono fonts from Google Fonts-->
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+	rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500"
+	rel="stylesheet" />
+<!-- Load main stylesheet-->
+<link href="css/styles.css" rel="stylesheet" />
+<style>
+table {
+	width: 100%;
+}
+
+table, th, td {
+	border: 1px solid black;
+}
+/* Hide the file input using
+opacity */
+.bulk-file {
+	position: absolute;
+	filter: alpha(opacity = 0);
+	opacity: 0;
+}
+
+.bulk-file+label {
+	border: 1px solid #CCC;
+	border-radius: 3px;
+	text-align: left;
+	padding: 5px;
+	margin: 0;
+	left: 0;
+	cursor: pointer;
+}
+
+.bulk-file+label {
+	text-align: center;
+	left: 7.35em;
+	top: 0.5em;
+	/* Decorative */
+	background: #2199e8;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+}
+
+#loader {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	display: none;
+}
+</style>
+</head>
+<body class="nav-fixed bg-light">
+	<!-- Top app bar navigation menu-->
+	<div th:insert="~{fragments/header.html :: headermenu}"></div>
+	<!-- Layout wrapper-->
+	<div id="layoutDrawer">
+		<!-- Layout navigation-->
+		<div th:insert="~{fragments/leftMenu.html :: leftmenu}"></div>
+		<!-- Layout content-->
+		<div id="layoutDrawer_content">
+			<!-- Main page content-->
+			<main> <!-- Page header--> <header class="bg-dark">
+				<div class="container-xl px-5">
+					<h1 class="text-white py-3 mb-0 display-6">PORT IN Request</h1>
+				</div>
+			</header>
+			<div class="container-xl p-5">
+				<div class="card card-raised">
+					<div class="card-body text-center p-5">
+						<div class="tab-content mb-5">
+							<div class="tab-pane show active" role="tabpanel"
+								id="bootstrapFormBasicDemo"
+								aria-labelledby="bootstrapFormBasicDemoTab">
+								<div class="p-3 p-sm-1">
+
+									<!-- 									<form role="form" action="#" id="portInForm" method="post" -->
+									<!-- 										enctype="multipart/form-data"> -->
+									<div class="row">
+										<div class="col-sm-6">
+											<div class="mb-3">
+												<label class="form-label" for="billingUID1">Billing
+													UID </label> <input class="form-control" id="billingUID1"
+													type="text" placeholder="Enter billingUID1"
+													name="billingUID1" />
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="mb-3">
+												<label class="form-label" for="instanceID">Instance
+													ID</label> <input class="form-control" id="instanceID" type="text"
+													placeholder="Enter instanceid" name="instanceID" />
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="mb-3">
+												<label class="form-label" for="rno">RNO </label> <input
+													class="form-control" id="rno" type="text"
+													th:value="*{op_id}" placeholder="Enter rno" name="rno"
+													readonly />
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="mb-3">
+												<label class="form-label" for="dno">DNO</label> <input
+													class="form-control" id="dno" type="text"
+													placeholder="Enter dno" name="dno" readonly />
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="mb-3">
+												<label class="form-label" for="area">Area </label>
+												<!-- <input
+													class="form-control" id="area" type="text"
+													placeholder="Enter area" name="area" /> -->
+												<select class="form-select" id="area">
+													<option th:each="item : ${listofarea}" th:value="${item}"
+														th:text="${item}"></option>
+												</select>
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="mb-3">
+												<label class="form-label" for="rn">RN</label> <input
+													class="form-control" id="rn" type="text" placeholder="0000"
+													name="rn" readonly />
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="mb-3">
+												<label class="form-label" for="companyCode">Company
+													Code </label> <input class="form-control" id="companyCode"
+													type="text" placeholder="Enter company code" maxlength="8"
+													name="companyCode" />
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="mb-3">
+												<label class="form-label" for="partnerID">Partner ID</label>
+												<input class="form-control" id="partnerID" type="text"
+													placeholder="Enter partnerid" name="partnerID" />
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="mb-3">
+												<label class="form-label" for="dummyMSISDN">Alternate
+													Number</label> <input class="form-control" id="dummyMSISDN"
+													type="text" maxlength="10" placeholder="Enter alternate number" />
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="mb-3">
+												<label class="form-label" for="hlr">HLR </label> <input
+													class="form-control" id="hlr" type="text"
+													placeholder="Enter hlr" />
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="mb-3">
+												<label class="form-label" for="service">Service</label> <select
+													class="form-select" id="service"
+													aria-label="Default select example">
+													<option selected>Select service</option>
+													<option value="Postpaid">Postpaid</option>
+													<option value="Prepaid">Prepaid</option>
+												</select>
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="mb-3">
+												<div style="display: none">
+													<label class="form-label" for="orderType">Order
+														Type</label> <input class="form-control" id="orderType"
+														type="text" value="1" placeholder="Enter order type"
+														readonly />
+												</div>
+												<div>
+													<label class="form-label" for="owner">Owner</label> <input
+														class="form-control" id="owner" type="text"
+														placeholder="Enter owner name" />
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="mb-3">
+												<label class="form-label" for="dataType">Data Type </label>
+												<select class="form-select" id="dataType"
+													aria-label="Default select example">
+													<option selected>Select data type</option>
+													<option value="1">Personal</option>
+													<option value="2">Corporate</option>
+												</select>
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="mb-3">
+												<div id="personal" style="display: none;">
+													<label class="form-label" for="orderType">MSISDN</label> <input
+														class="form-control" id="msisdn" type="text" maxlength="10"
+														placeholder="Enter plan number" />
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-12">
+											<div class="mb-12">
+												<div id="corporate">
+													<table id="example1">
+														<thead>
+															<tr>
+																<th>MSISDN</th>
+																<th>Pin code</th>
+																<th>SIM</th>
+																<th>IMSI</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
+																<td contenteditable='true'></td>
+																<td contenteditable='true'></td>
+																<td contenteditable='true'></td>
+																<td contenteditable='true'></td>
+															</tr>
+														</tbody>
+													</table>
+													<div style="padding: 5px;">
+														<input type="submit" class="button add_another"
+															value="Add row" /> <span
+															style="color: red; font-size: 16px; padding: 5px;">OR</span>
+														<input id="f02" type="file" style="width: 10px;"
+															placeholder="Add profile picture"
+															class="form-controls bulk-file" /> <label for="f02"
+															style="cursor: pointer;">Upload bulk file</label><span>(<a
+															onclick="download_quotefile()" style="cursor: pointer;">Download
+																Sample File</a>)
+														</span>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="mb-3">
+												<div th:if="*{visible==1}">
+													<label class="form-label" for="uploadoc">Upload
+														Document</label> <input class="form-control doc-control"
+														id="uploadoc" type="file" accept="application/pdf" />
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-6"></div>
+										<div class="col-sm-6">
+											<div class="mb-3">
+												<button class="btn btn-danger" name="Submit" value="Submit"
+													type="Submit" th:text="Submit" id="btnSubmit">Submit</button>
+												&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-primary"
+													href="portin.html">Close </a>
+											</div>
+										</div>
+									</div>
+									<!-- 									</form> -->
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			</main>
+			<!-- Footer-->
+			<div th:insert="~{fragments/footer.html :: footer}"></div>
+			<div id="loader" style="display: none;">
+				<!-- Spinner -->
+				<div class="spinner-border text-primary" role="status">
+					<span class="visually-hidden">Loading...</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Load Bootstrap JS bundle-->
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+		crossorigin="anonymous"></script>
+	<!-- Load global scripts-->
+	<!-- 	<script type="module" src="js/material.js"></script> -->
+	<script src="js/scripts.js"></script>
+	<!-- Load Prism plugin scripts-->
+	<!-- 	<script src="/js/prism.js"></script> -->
+	<script src="js/jquery/jquery.min.js"></script>
+	<script
+		src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+	<script src="js/portme/portinrequest.js"></script>
+	<script src="js/localization/localization.js"></script>
+	<script>
+		
+	</script>
+</body>
+</html>

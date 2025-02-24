@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<property name="APP_PATH"
+		value="${user.home}/app-logging/MNP-Gateway/" />
+
+	<appender name="STDOUT"
+		class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${APP_PATH}/MNPGatewayPortal.log</file>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${APP_PATH}/MNPGatewayPortal.log-%d{yyyy-MM-dd}-%i
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>100GB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%date %level [%thread] %logger{10} [%file:%line] %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="DATABASE-FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${APP_PATH}/DB-MNPGatewayPortal.log</file>
+		<rollingPolicy
+			class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${APP_PATH}/DB-MNPGatewayPortal.log-%d{yyyy-MM-dd}-%i
+			</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>100GB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%date %level [%thread] %logger{10} [%file:%line] %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="com.megthink.gateway" level="INFO"
+		additivity="false">
+		<appender-ref ref="FILE" />
+	</logger>
+
+	<logger name="com.megthink.gateway.dao" level="INFO"
+		additivity="false">
+		<appender-ref ref="DATABASE-FILE" />
+	</logger>
+
+	<!-- Enable DEBUG logging temporarily when needed -->
+	<logger name="com.megthink.gateway" level="DEBUG"
+		additivity="false">
+		<appender-ref ref="STDOUT" />
+	</logger>
+
+	<root level="INFO">
+		<appender-ref ref="STDOUT" />
+	</root>
+
+</configuration>

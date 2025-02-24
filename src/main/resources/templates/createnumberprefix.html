@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+<title>Number Prefix</title>
+<!-- Load Favicon-->
+<link href="assets/img/favicon.ico" rel="shortcut icon"
+	type="image/x-icon" />
+<!-- Load Material Icons from Google Fonts-->
+<link
+	href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+	rel="stylesheet" />
+<!-- Load Simple DataTables Stylesheet-->
+<link
+	href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css"
+	rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/litepicker/dist/css/style.css"
+	rel="stylesheet" />
+<!-- Roboto and Roboto Mono fonts from Google Fonts-->
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+	rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,500"
+	rel="stylesheet" />
+<!-- Load main stylesheet-->
+<link href="css/styles.css" rel="stylesheet" />
+<style>
+td {
+	white-space: nowrap;
+}
+
+th {
+	white-space: nowrap;
+}
+/* Tooltip container */
+.tooltip {
+	position: relative;
+	display: inline-block;
+	border-bottom: 1px dotted black;
+	/* If you want dots under the hoverable text */
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+	visibility: hidden;
+	width: 120px;
+	background-color: #555;
+	color: #fff;
+	text-align: center;
+	padding: 5px 0;
+	border-radius: 6px;
+	/* Position the tooltip text */
+	position: absolute;
+	z-index: 1;
+	bottom: 125%;
+	left: 50%;
+	margin-left: -60px;
+	/* Fade in tooltip */
+	opacity: 0;
+	transition: opacity 0.3s;
+}
+
+/* Tooltip arrow */
+.tooltip .tooltiptext::after {
+	content: "";
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	margin-left: -5px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: #555 transparent transparent transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+	visibility: visible;
+	opacity: 1;
+}
+</style>
+</head>
+<body class="nav-fixed bg-light">
+	<!-- Top app bar navigation menu-->
+	<div th:insert="~{fragments/header.html :: headermenu}"></div>
+	<!-- Layout wrapper-->
+	<div id="layoutDrawer">
+		<!-- Layout navigation-->
+		<div th:insert="~{fragments/leftMenu.html :: leftmenu}"></div>
+		<!-- Layout content-->
+		<div id="layoutDrawer_content">
+			<!-- Main page content-->
+			<!-- Page header-->
+			<header class="bg-dark">
+				<div class="container-xl px-5">
+					<h1 class="text-white py-3 mb-0 display-6">
+						<span>Number Prefix</span>
+					</h1>
+				</div>
+			</header>
+			<div class="container-xl p-5">
+				<div class="card card-raised">
+					<div class="card-body text-center p-5">
+						<form role="form" action="#" id="numberPlanForm"
+							th:action="@{prefix.html}" th:object="${numberPlanForm}"
+							method="post">
+							<div class="row">
+								<div class="col-sm-5">
+									<div class="mb-3">
+										<label class="form-label" for="msisdn">Operator Name </label>
+										<select class="form-select" id="op_id" name="op_id"
+											aria-label="Default select example">
+											<option value="0">Select operator...</option>
+											<option th:each="item : ${numberPlan}"
+												th:value="${item.op_id}" th:text="${item.op_name}"></option>
+										</select> <label id="lblop_id" style="color: red; visibility: hidden;">Operator
+											Name cann't be empty</label>
+									</div>
+								</div>
+								<div class="col-sm-7"></div>
+							</div>
+							<hr />
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="mb-3">
+										<label class="form-label" for="start_range">Start
+											Range</label> <input class="form-control" id="start_range"
+											type="text" placeholder="Enter start range"
+											name="start_range" /> <label id="lblstartrange"
+											style="color: red; visibility: hidden;"> <span
+											id="strangetext"></span>
+										</label>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="mb-3">
+										<label class="form-label" for="end_range">End Range</label> <input
+											class="form-control" id="end_range" type="text"
+											placeholder="Enter start range" name="end_range" /> <label
+											id="lblendrange" style="color: red; visibility: hidden;">
+											<span id="endrangetext"></span>
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="mb-3">
+										<label class="form-label" for="technology">Technology</label>
+										<select class="form-select" id="technology" name="technology"
+											aria-label="Default select example">
+											<option value="GSM">GSM</option>
+											<option value="CDMA">CDMA</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="mb-3">
+										<label class="form-label" for="type">Type</label>
+										<select class="form-select" id="type" name="type"
+											aria-label="Default select example">
+											<option value="PREPAID">PREPAID</option>
+											<option value="POSTPAID">POSTPAID</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-6">
+									<div class="mb-3">
+										<label class="form-label" for="area">Area</label> <input
+											class="form-control" id="area" type="text"
+											placeholder="Enter area" name="area" /> <label id="lblarea"
+											style="color: red; visibility: hidden;">Area cann't
+											be empty</label>
+									</div>
+								</div>
+								<div class="col-sm-6">
+									<div class="mb-3">
+										<label class="form-label" for="routing_info">Routing
+											Info</label> <input class="form-control" id="routing_info"
+											type="text" placeholder="Enter routing info"
+											name="routing_info" /> <label id="lblrinfo"
+											style="color: red; visibility: hidden;"> <span
+											id="rinforangetext"></span>
+										</label>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="mb-3">
+										<input id="slno" type="hidden" name="slno" />
+										<button class="btn btn-danger btn-sm pull-right" id="Submit"
+											type="button">Submit</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+
+			<!-- Footer-->
+			<div th:insert="~{fragments/footer.html :: footer}"></div>
+		</div>
+	</div>
+	<!-- Load Bootstrap JS bundle-->
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+		crossorigin="anonymous"></script>
+	<!-- Load global scripts-->
+<!-- 	<script type="module" src="js/material.js"></script> -->
+		<script src="js/scripts.js"></script>
+	<!-- Load Simple DataTables Scripts-->
+	<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"
+		crossorigin="anonymous"></script>
+	<script th:src="@{js/datatables/datatables-simple-demo.js}"></script>
+	<script th:src="@{js/jquery/jquery.min.js}"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/litepicker/dist/js/main.nocss.js"
+		crossorigin="anonymous"></script>
+	<script th:src="@{js/portme/numberprefix.js}"></script>
+	<script th:src="@{js/litepicker.js}"></script>
+	<!-- 	<script src="/js/prism.js"></script> -->
+</body>
+</html>
