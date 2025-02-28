@@ -63,12 +63,63 @@ public class SailpointController {
 	        return userService.getGroups();
 	    }
 	    
-	    @RequestMapping(value = { "/createuser" }, method = RequestMethod.POST, produces = {
-	            MediaType.APPLICATION_JSON_VALUE })
+//	    @RequestMapping(value = { "/createuser" }, method = RequestMethod.POST, produces = {
+//	            MediaType.APPLICATION_JSON_VALUE })
+//	    @ResponseBody
+//	    public ResponseEntity<?> createUser(@Valid @RequestBody UserForm userForm)
+//	            throws ParseException, IllegalStateException, IOException {
+//	    	System.out.println("Create user start");
+//	        String sessionId = Long.toString(System.currentTimeMillis());
+//	        _logger.info("[sessionId=" + sessionId + "]: UserController.createUser()-Start processing to save new user details");
+//	        
+//	        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//	        User user = userService.findUserByUsername(auth.getName());
+//	        WebAccessTrace logTrace = new WebAccessTrace();
+//	        logTrace.setAction("createuser");
+//	        logTrace.setDesc("submit data to create user");
+//	        logTrace.setUser_id(user.getUserId());
+//	        saveWebAccessTrace(logTrace);
+//
+//	        int isExist = userService.isUserExist(userForm.getUsername());
+//	        Map<String, String> response = new HashMap<>();
+//
+//	        if (isExist == 0) {
+//	            Date date = new Date();
+//	            long time = date.getTime();
+//	            Timestamp timestamp = new Timestamp(time);
+//
+//	            User userDetails = UserFormMapper.mapToForm(userForm, sessionId);
+//	            userDetails.setCreatedByUserId(user.getUserId());
+//	            userDetails.setCreatedDateTime(timestamp.toString());
+//	            userDetails.setUpdatedDateTime(timestamp);
+//
+//	            userDetails = userService.saveUser(userDetails);
+//
+//	            if (userDetails.getUserId() != 0) {
+//	                userService.createRoleMappingEntry(userDetails.getUserId(), userForm.getUserType());
+//	                _logger.info("[sessionId=" + sessionId + "]: UserController.createUser()-save new user details successfully");
+//	                response.put("status", "success");
+//	                response.put("message", "User created successfully");
+//	                return ResponseEntity.ok(response);
+//	            } else {
+//	                _logger.info("[sessionId=" + sessionId + "]: UserController.createUser()-save new user details failed");
+//	                response.put("status", "error");
+//	                response.put("message", "User creation failed");
+//	                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+//	            }
+//	        } else {
+//	            _logger.info("[sessionId=" + sessionId + "]: UserController.createUser()-user details already exist");
+//	            response.put("status", "error");
+//	            response.put("message", "User details already exist");
+//	            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+//	        }
+//	    }
+	    
+	    @RequestMapping(value = { "/createuser" }, method = RequestMethod.POST, produces = { MediaType.APPLICATION_JSON_VALUE })
 	    @ResponseBody
 	    public ResponseEntity<?> createUser(@Valid @RequestBody UserForm userForm)
 	            throws ParseException, IllegalStateException, IOException {
-	    	System.out.println("Create user start");
+	        System.out.println("Create user start"+userForm);
 	        String sessionId = Long.toString(System.currentTimeMillis());
 	        _logger.info("[sessionId=" + sessionId + "]: UserController.createUser()-Start processing to save new user details");
 	        
@@ -88,10 +139,21 @@ public class SailpointController {
 	            long time = date.getTime();
 	            Timestamp timestamp = new Timestamp(time);
 
+	            // ✅ Generate password dynamically using firstname from request body
+	            String generatedPassword = userForm.getFirstName() + "#1";
+
 	            User userDetails = UserFormMapper.mapToForm(userForm, sessionId);
+	            userDetails.setEmailId(userForm.getEmailId());
+	            userDetails.setContactNumber(userForm.getContactNumber());
+	            userDetails.setCompanyName(userForm.getCompanyName());
 	            userDetails.setCreatedByUserId(user.getUserId());
+	            userDetails.setContactPerson(userForm.getContactPerson());
+	            userDetails.setStatus(user.getStatus());
 	            userDetails.setCreatedDateTime(timestamp.toString());
 	            userDetails.setUpdatedDateTime(timestamp);
+	            
+	            // ✅ Set the generated password
+	            userDetails.setPassword(generatedPassword);
 
 	            userDetails = userService.saveUser(userDetails);
 
@@ -114,6 +176,8 @@ public class SailpointController {
 	            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
 	        }
 	    }
+
+	    
 	    public void saveWebAccessTrace(WebAccessTrace logTrace) {
 			try {
 				webAccessTraceService.saveWebAccessTrace(logTrace);
@@ -189,6 +253,37 @@ public class SailpointController {
 	        saveWebAccessTrace(logTrace);
 
 	        boolean isDeactivated = userService.deactivateUser(userId);
+	        Map<String, String> response = new HashMap<>();
+
+	        if (isDeactivated) {
+	            _logger.info("[sessionId=" + sessionId + "]: UserController.deactivateUser()-User deactivated successfully");
+	            response.put("status", "success");
+	            response.put("message", "User deactivated successfully");
+	            return ResponseEntity.ok(response);
+	        } else {
+	            _logger.info("[sessionId=" + sessionId + "]: UserController.deactivateUser()-User not found");
+	            response.put("status", "error");
+	            response.put("message", "User not found");
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+	        }
+	    }
+
+	    @RequestMapping(value = { "/deactivateuser1" }, method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+	    @ResponseBody
+	    public ResponseEntity<?> deactivateUser(@RequestParam("email") String email) {
+	        String sessionId = Long.toString(System.currentTimeMillis());
+	        _logger.info("[sessionId=" + sessionId + "]: UserController.deactivateUser()-Start processing to deactivate user");
+
+	        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        User authenticatedUser = userService.findUserByUsername(auth.getName());
+
+	        WebAccessTrace logTrace = new WebAccessTrace();
+	        logTrace.setAction("deactivateuser");
+	        logTrace.setDesc("submit data to deactivate user");
+	        logTrace.setUser_id(authenticatedUser.getUserId());
+	        saveWebAccessTrace(logTrace);
+
+	        boolean isDeactivated = userService.deactivateUserByEmail(email);
 	        Map<String, String> response = new HashMap<>();
 
 	        if (isDeactivated) {

@@ -29,12 +29,16 @@ public class UserService {
 		this.userRepository = userRepository;
 	}
 
+	
 	public User findUserByUsername(String username) {
 		return userRepository.findByUsername(username).get();
 	}
 	public User findUserById(int userId) {
 		return userRepository.findById(userId).orElse(null);
 		
+	}
+	public User findUserByEmail(String emailId) {
+        return userRepository.findByEmailId(emailId);
 	}
 
 	public User saveUser(User user) {
@@ -120,6 +124,17 @@ public class UserService {
 	        }
 	        return false; 
 	 }
+	 
+	 public boolean deactivateUserByEmail(String emailId) {
+		    User user = findUserByEmail(emailId);
+		    if (user != null) {
+		        user.setStatus(0); 
+		        saveUser(user); 
+		        return true;
+		    }
+		    return false;
+		}
+
 
 	
 }
