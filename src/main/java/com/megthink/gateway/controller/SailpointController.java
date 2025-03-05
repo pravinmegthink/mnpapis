@@ -26,6 +26,7 @@ import com.megthink.gateway.form.UserForm;
 import com.megthink.gateway.form.UserFormMapper;
 import com.megthink.gateway.model.Role;
 import com.megthink.gateway.model.User;
+import com.megthink.gateway.model.UserDTO;
 import com.megthink.gateway.model.WebAccessTrace;
 import com.megthink.gateway.service.UserService;
 import com.megthink.gateway.service.WebAccessTraceService;
@@ -49,7 +50,13 @@ public class SailpointController {
 	        return userService.getUserList1();
 	        
 	    }
-	 
+	    @GetMapping("/users2")
+	    public List<UserDTO> getUsersJson1() {
+    	
+	        return userService.getUserList2();
+	        
+	    }
+	    
 //	    @GetMapping("/users1")
 //	    public User getUsersJson() {
 //	    	User item = userService.findUserById(1);
@@ -268,37 +275,49 @@ public class SailpointController {
 	        }
 	    }
 
-	    @RequestMapping(value = { "/deactivateuser1" }, method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-	    @ResponseBody
-	    public ResponseEntity<?> deactivateUser(@RequestParam("email") String email) {
-	        String sessionId = Long.toString(System.currentTimeMillis());
-	        _logger.info("[sessionId=" + sessionId + "]: UserController.deactivateUser()-Start processing to deactivate user");
+	    @RequestMapping(value = { "/deactivateuser1" }, method = RequestMethod.PUT, 
+                consumes = MediaType.APPLICATION_JSON_VALUE, 
+                produces = MediaType.APPLICATION_JSON_VALUE)
+ @ResponseBody
+ public ResponseEntity<?> deactivateUser(@RequestBody Map<String, String> requestBody) {
+    String sessionId = Long.toString(System.currentTimeMillis());
+    _logger.info("[sessionId=" + sessionId + "]: UserController.deactivateUser()-Start processing to deactivate user");
 
-	        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	        User authenticatedUser = userService.findUserByUsername(auth.getName());
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    User authenticatedUser = userService.findUserByUsername(auth.getName());
 
-	        WebAccessTrace logTrace = new WebAccessTrace();
-	        logTrace.setAction("deactivateuser");
-	        logTrace.setDesc("submit data to deactivate user");
-	        logTrace.setUser_id(authenticatedUser.getUserId());
-	        saveWebAccessTrace(logTrace);
+    WebAccessTrace logTrace = new WebAccessTrace();
+    logTrace.setAction("deactivateuser");
+    logTrace.setDesc("submit data to deactivate user");
+    logTrace.setUser_id(authenticatedUser.getUserId());
+    saveWebAccessTrace(logTrace);
 
-	        boolean isDeactivated = userService.deactivateUserByEmail(email);
-	        Map<String, String> response = new HashMap<>();
+    // Extract email from request body
+    String email = requestBody.get("email");
+    
+    if (email == null || email.isEmpty()) {
+        _logger.error("[sessionId=" + sessionId + "]: UserController.deactivateUser()- Email is missing in request body");
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("status", "error");
+        errorResponse.put("message", "Email is required in the request body");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
 
-	        if (isDeactivated) {
-	            _logger.info("[sessionId=" + sessionId + "]: UserController.deactivateUser()-User deactivated successfully");
-	            response.put("status", "success");
-	            response.put("message", "User deactivated successfully");
-	            return ResponseEntity.ok(response);
-	        } else {
-	            _logger.info("[sessionId=" + sessionId + "]: UserController.deactivateUser()-User not found");
-	            response.put("status", "error");
-	            response.put("message", "User not found");
-	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-	        }
-	    }
+    boolean isDeactivated = userService.deactivateUserByEmail(email);
+    Map<String, String> response = new HashMap<>();
 
+    if (isDeactivated) {
+        _logger.info("[sessionId=" + sessionId + "]: UserController.deactivateUser()-User deactivated successfully");
+        response.put("status", "success");
+        response.put("message", "User deactivated successfully");
+        return ResponseEntity.ok(response);
+    } else {
+        _logger.info("[sessionId=" + sessionId + "]: UserController.deactivateUser()-User not found");
+        response.put("status", "error");
+        response.put("message", "User not found");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+ }
 
 }
 
