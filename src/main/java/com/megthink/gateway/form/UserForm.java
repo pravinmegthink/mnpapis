@@ -102,4 +102,13 @@ public class UserForm {
 		this.userType = userType;
 	}
 
+	@Override
+	public String toString() {
+		return "UserForm [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", username="
+				+ username + ", password=" + password + ", contactNumber=" + contactNumber + ", emailId=" + emailId
+				+ ", contactPerson=" + contactPerson + ", status=" + status + ", companyName=" + companyName
+				+ ", userType=" + userType + "]";
+	}
+	
+
 }

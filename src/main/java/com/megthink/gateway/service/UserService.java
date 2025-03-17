@@ -10,6 +10,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.megthink.gateway.dao.UserDao;
@@ -32,6 +33,9 @@ public class UserService {
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
 
+	 @Autowired
+	    private JdbcTemplate jdbcTemplate;
+	 
 	@Autowired
 	public UserService(UserRepository userRepository) {
 		this.userRepository = userRepository;
@@ -66,14 +70,16 @@ public class UserService {
 
 	@Transactional
 	public void createRoleMappingEntry(int userId, int roleId) {
-		try {
-			entityManager.createNativeQuery("INSERT INTO user_role(role_id, user_id) values (?,?)")
-					.setParameter(1, roleId).setParameter(2, userId).executeUpdate();
-		} catch (Exception e) {
-			_logger.error("UserService.createRoleMappingEntry() - " + e.getMessage());
-		}
+	    try {
+	        entityManager.createNativeQuery("INSERT INTO user_role(role_id, user_id) values (?,?)")
+	                     .setParameter(1, roleId)
+	                     .setParameter(2, userId)
+	                     .executeUpdate();
+	    } catch (Exception e) {
+	        _logger.error("UserService.createRoleMappingEntry() - " + e.getMessage());
+	    }
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	@Transactional
 	public List<User> getUserList() {
@@ -124,7 +130,6 @@ public class UserService {
 	                    Timestamp createdTimestamp = null;
 	                    Timestamp updatedTimestamp = null;
 
-	                    // Handle different possible return types for date fields
 	                    if (row[11] instanceof String) {
 	                        createdTimestamp = new Timestamp(dateFormat.parse((String) row[11]).getTime());
 	                    } else if (row[11] instanceof Timestamp) {
@@ -207,6 +212,36 @@ public class UserService {
 		    return false;
 		}
 
+	 public boolean deactivateUserByEmail1(String emailId) {
+		    User user = findUserByEmail(emailId);
+		    if (user != null) {
+		        user.setStatus(0); 
+		        saveUser(user); 
+		        deleteUserRolesByUserId1(user.getUserId());
 
+		        return true;
+		    }
+		    return false;
+		}
+	 public void deleteUserRolesByUserId1(int userId) {
+		    String sql = "DELETE FROM user_role WHERE user_id = ?";
+		    jdbcTemplate.update(sql, userId);
+		}
+
+	 @Transactional
+	 public boolean reactivateUserAndAssignRole(String emailId, int roleId) {
+	     User user = findUserByEmail(emailId);
+	     if (user != null) {
+	         user.setStatus(1);
+	         saveUser(user);
+
+	         createRoleMappingEntry(user.getUserId(), roleId);
+
+	         return true;
+	     }
+	     return false;
+	 }
+	 
 	
+	 
 }
